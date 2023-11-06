@@ -95,7 +95,7 @@ async def updateTiket(tiket: Tiket):
 			
 			with open(json_filename,"w") as write_file:
 				json.dump(data, write_file)
-			return data['tiket']
+			return tiket_dict
 	
 	if not tiket_found:
 		return "Tiket not found."
@@ -114,10 +114,10 @@ async def deleteTiket(tiket_id: int):
 			
 			with open(json_filename,"w") as write_file:
 				json.dump(data, write_file)
-			return "Data Deleted"
+			return "Tiket Deleted"
 	
 	if not tiket_found:
-		return "tiket not found."
+		return "Tiket not found."
 	raise HTTPException(
 		status_code=404, detail=f'Tiket not found'
 	)
