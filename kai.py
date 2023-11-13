@@ -22,7 +22,7 @@ class Kereta(BaseModel):
 	tipe: str
 	jml_gerbong: int
 
-json_filename="kai.json"
+json_filename= 'data.json'
 
 with open(json_filename,"r") as read_file:
 	data = json.load(read_file)
@@ -76,7 +76,7 @@ async def addTiket(tiket: Tiket):
 	
 	if not tiket_found:
 		data['tiket'].append(tiket_dict)
-		with open(json_filename,"w") as write_file:
+		with open(json_filename,'w') as write_file:
 			json.dump(data, write_file)
 
 		return tiket_dict
@@ -93,7 +93,7 @@ async def updateTiket(tiket: Tiket):
 			tiket_found = True
 			data['tiket'][tiket_idx]=tiket_dict
 			
-			with open(json_filename,"w") as write_file:
+			with open(json_filename,'w') as write_file:
 				json.dump(data, write_file)
 			return tiket_dict
 	
@@ -112,7 +112,7 @@ async def deleteTiket(tiket_id: int):
 			tiket_found = True
 			data['tiket'].pop(tiket_idx)
 			
-			with open(json_filename,"w") as write_file:
+			with open(json_filename,'w') as write_file:
 				json.dump(data, write_file)
 			return "Tiket Deleted"
 	
@@ -147,7 +147,7 @@ async def addKereta(kereta: Kereta):
 	
 	if not kereta_found:
 		data['kereta'].append(kereta_dict)
-		with open(json_filename,"w") as write_file:
+		with open(json_filename,'w') as write_file:
 			json.dump(data, write_file)
 
 		return kereta_dict
