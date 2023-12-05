@@ -5,7 +5,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from db.connection import cursor
+from db.connection import connectDB
 
 # Load environment variables
 SECRET_KEY = "ohyeahbabymantap"
@@ -34,6 +34,8 @@ def create_access_token(data: dict, expires_delta: timedelta=None):
 
 # Verify token and get user info
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+    conn = connectDB()
+    cursor = conn.cursor(dictionary=True)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -49,12 +51,16 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     query = ("SELECT * FROM user WHERE username = %s")
     cursor.execute(query, (username,))
     result = cursor.fetchone()
+    cursor.close()
+    conn.close()
     if not result :
         raise credentials_exception
     else :
         return result
     
 async def check_is_admin(token: Annotated[bool, Depends(oauth2_scheme)]):
+    conn = connectDB()
+    cursor = conn.cursor(dictionary=True)
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -70,6 +76,8 @@ async def check_is_admin(token: Annotated[bool, Depends(oauth2_scheme)]):
     query = ("SELECT * FROM user WHERE username = %s")
     cursor.execute(query, (username,))
     result = cursor.fetchone()
+    cursor.close()
+    conn.close()
     if not result:
         raise credentials_exception
     elif result['role'] != "admin":

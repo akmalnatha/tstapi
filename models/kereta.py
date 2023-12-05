@@ -5,3 +5,5 @@ class Kereta(BaseModel):
 	merk: str
 	tipe: str
 	jml_gerbong: int
+	keberangkatan: str
+	tujuan: str

@@ -1,0 +1,1 @@
+holiday_recomendation="https://ayokebalitst.azurewebsites.net"
