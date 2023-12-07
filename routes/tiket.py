@@ -74,7 +74,7 @@ async def write_data(tiket: Tiket, check: Annotated[bool, Depends(check_is_login
     tiket_json = tiket.model_dump()
     
     await read_data_by_idKereta(tiket_json["kereta_id"]) 
-    query = "INSERT INTO tiket(user_id, penumpang_id, kereta_id, date_time) VALUES(%d,%d,%d.%s);"
+    query = "INSERT INTO tiket(user_id, penumpang_id, kereta_id, date_time) VALUES(%s,%s,%s,%s);"
     cursor.execute(query, (user["id"], tiket_json["penumpang_id"], tiket_json["kereta_id"], tiket_json["date_time"]))
     conn.commit()
 
