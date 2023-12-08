@@ -50,14 +50,14 @@ async def read_data_by_userId(user_id: int, check: Annotated[bool, Depends(get_c
     conn = connectDB()
     cursor = conn.cursor(dictionary=True)
     if check["id"] != user_id and check["role"] != "admin":
-        return
+        return "Not Authorized"
     select_query = "SELECT * FROM tiket WHERE user_id = %s;"
     cursor.execute(select_query, (user_id,))
     data = cursor.fetchone()
     cursor.close()
     conn.close()
     if data is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Data Tiket: with user {id} Not Found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Data Tiket: with user {user_id} Not Found")
 
     return {
         "code": 200,
