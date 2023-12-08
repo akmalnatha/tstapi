@@ -94,17 +94,17 @@ async def write_data(tiket: Tiket, check: Annotated[bool, Depends(check_is_login
 async def update_data(tiket: Tiket, id:int, user: Annotated[User, Depends(get_current_user)]):
     conn = connectDB()
     cursor = conn.cursor(dictionary=True)
-    check_user_query = "SELECT * FROM tiket WHERE id = %s;"
-    cursor.execute(check_user_query, (id,))
-    check_user = cursor.fetchone()
-    if user["id"] != check_user["user_id"] and user["role"] != "admin":
-        return
-    tiket_json = tiket.model_dump()
     select_query = "SELECT * FROM tiket WHERE id = %s;"
     cursor.execute(select_query, (id,))
     data = cursor.fetchone()
     if data is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Data Tiket id {id} Not Found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Data tiket id {id} Not Found")
+    # check_user_query = "SELECT * FROM tiket WHERE id = %s;"
+    # cursor.execute(check_user_query, (id,))
+    # check_user = cursor.fetchone()
+    if user["id"] != data["user_id"] and user["role"] != "admin":
+        return "Not Authorized"
+    tiket_json = tiket.model_dump()
     
     await read_data_by_idKereta(tiket_json["kereta_id"])
     query = "UPDATE tiket SET penumpang_id = %s, kereta_id = %s, date_time=%s, notes=%s WHERE tiket.id = %s;"
